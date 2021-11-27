@@ -1,22 +1,13 @@
 <?php
-
 namespace App\Modules\Admin\Controllers;
 
 use App\Models\Menu;
 use App\Modules\Admin\AdminController;
-use App\Helpers\SearchForm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-
 class MenuController extends AdminController
 {
-
-    /**
-     * Manage
-     *
-     * @return void
-     */
     public function manage(Request $request){
         $data = [];
         $data['title'] = trans('menu.manage');
@@ -25,30 +16,9 @@ class MenuController extends AdminController
         return view('Admin::menu.manage', $data);
     }
 
-    /**
-     * datatable
-     *
-     * @param Request $request
-     * @return void
-     */
     public function datatable(Request $request){
-        $page = intval($request->post('start'));
-        $limit = intval($request->post('length'));
-        $order = $request->post('order');
-        $builder = Menu::select('*')
-            ->where('parent', 0)
-            ->offset($page * $limit);
-        if ($order) {
-            $orderArr = explode(' ', $order);
-            $builder->orderBy($orderArr[0], $orderArr[1]);
-        }
-        $fdata = sanitize([
-            'name' => 'string'
-        ]);
-        if ($fdata['name']) {
-            $builder->where('menu.name', 'like', '%' . $fdata['name'] . '%');
-        }
-        $pagination = $builder->paginate($limit);
+        $menu = new Menu();
+        $pagination = $menu->getPagination($request);
         $items = $pagination->items();
         $rows = [];
         foreach ($items as $item) {

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Http\Request;
+
 class Menu extends BaseModel
 {
     protected $table = 'menu';
@@ -14,6 +16,27 @@ class Menu extends BaseModel
 
     public function mparent(){
         return $this->hasOne(Menu::class, 'id', 'parent');
+    }
+    
+    public function getPagination(Request $request){
+        $page = intval($request->post('start'));
+        $limit = intval($request->post('length'));
+        $order = $request->post('order');
+        $builder = Menu::select('*')
+            ->where('parent', 0)
+            ->offset($page * $limit);
+        if ($order) {
+            $orderArr = explode(' ', $order);
+            $builder->orderBy($orderArr[0], $orderArr[1]);
+        }
+        $fdata = sanitize([
+            'name' => 'string'
+        ]);
+        if ($fdata['name']) {
+            $builder->where('name', 'like', '%' . $fdata['name'] . '%');
+        }
+        $pagination = $builder->paginate($limit);
+        return $pagination;
     }
 
     public function renderRow($item, $prefix = ''){

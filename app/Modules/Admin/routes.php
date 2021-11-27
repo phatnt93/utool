@@ -49,11 +49,11 @@ Route::name('admin.')
                 ->prefix('user')
                 ->group(function(){
                     Route::get('/', 'UserController@manage')->name('manage');
-                    Route::get('/datatable', 'UserController@datatable')->name('datatable');
+                    Route::post('/datatable', 'UserController@datatable')->name('datatable');
                     Route::get('/create', 'UserController@create')->name('create');
                     Route::post('/create', 'UserController@store')->name('store');
-                    Route::get('/edit', 'UserController@edit')->name('edit');
-                    Route::post('/edit', 'UserController@update')->name('update');
+                    Route::get('/edit/{id}', 'UserController@edit')->name('edit')->where('id', '[0-9]+');
+                    Route::post('/edit/{id}', 'UserController@update')->name('update')->where('id', '[0-9]+');
                     Route::post('/delete', 'UserController@delete')->name('delete');
                 });
         });
