@@ -19,6 +19,7 @@ Route::name('admin.')
     ->namespace('\App\Modules\Admin\Controllers')
     ->middleware(['admin'])
     ->group(function(){
+
         Route::middleware([CheckLoginAdmin::class])->group(function(){
             Route::get('/login', 'AuthController@login')->name('login');
             Route::post('/login', 'AuthController@doLogin')->name('doLogin');
@@ -27,9 +28,11 @@ Route::name('admin.')
 
         Route::middleware(['auth:admin', CheckLoginAdmin::class])->group(function(){
             
-            
             // Dashboard
             Route::get('/', 'IndexController@index')->name('dashboard');
+
+            // Error
+            Route::get('/error', 'IndexController@error')->name('error');
 
             // Menu
             Route::name('menu.')
@@ -55,6 +58,20 @@ Route::name('admin.')
                     Route::get('/edit/{id}', 'UserController@edit')->name('edit')->where('id', '[0-9]+');
                     Route::post('/edit/{id}', 'UserController@update')->name('update')->where('id', '[0-9]+');
                     Route::post('/delete', 'UserController@delete')->name('delete');
+                });
+
+            // Role
+            Route::name('role.')
+                ->prefix('role')
+                ->group(function(){
+                    Route::get('/', 'RoleController@manage')->name('manage');
+                    Route::post('/datatable', 'RoleController@datatable')->name('datatable');
+                    Route::get('/create', 'RoleController@create')->name('create');
+                    Route::post('/create', 'RoleController@store')->name('store');
+                    Route::get('/edit/{id}', 'RoleController@edit')->name('edit')->where('id', '[0-9]+');
+                    Route::post('/edit/{id}', 'RoleController@update')->name('update')->where('id', '[0-9]+');
+                    Route::post('/delete', 'RoleController@delete')->name('delete');
+                    Route::match(['get', 'post'], '/permission/{id}', 'RoleController@permission')->name('permission')->where('id', '[0-9]+');
                 });
         });
     });

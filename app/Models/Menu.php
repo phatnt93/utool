@@ -60,4 +60,8 @@ class Menu extends BaseModel
         }
         return false;
     }
+
+    // public static function name(params){
+    //     code
+    // }
 }

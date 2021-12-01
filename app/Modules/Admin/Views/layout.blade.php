@@ -34,7 +34,7 @@
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
-            <section class="content-header">
+            <section class="content-header pb-2 pt-2">
                 {{-- <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
@@ -86,5 +86,6 @@
 {{-- <script src="{{ asset('assets/dist/js/demo.js') }}"></script> --}}
 <script src="{{ asset('assets/admin/base.js') }}"></script>
 @yield('scripts')
+@yield('scripts-sidebar')
 </body>
 </html>

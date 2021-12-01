@@ -36,6 +36,7 @@
     32 => 'App\\Providers\\RouteServiceProvider',
     33 => 'App\\Modules\\ModulesServiceProvider',
     34 => 'App\\Providers\\TranslationServiceProvider',
+    35 => 'App\\Providers\\MenuServiceProvider',
   ),
   'eager' => 
   array (
@@ -60,6 +61,7 @@
     18 => 'App\\Providers\\RouteServiceProvider',
     19 => 'App\\Modules\\ModulesServiceProvider',
     20 => 'App\\Providers\\TranslationServiceProvider',
+    21 => 'App\\Providers\\MenuServiceProvider',
   ),
   'deferred' => 
   array (

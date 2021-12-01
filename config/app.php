@@ -180,7 +180,8 @@ return [
         \App\Providers\RouteServiceProvider::class,
         
         \App\Modules\ModulesServiceProvider::class,
-        \App\Providers\TranslationServiceProvider::class
+        \App\Providers\TranslationServiceProvider::class,
+        \App\Providers\MenuServiceProvider::class
     ],
 
     /*

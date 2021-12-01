@@ -22,6 +22,7 @@ class Menu extends Migration
             $table->integer('sort')->default(0);
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
+            $table->string('icon', 50)->nullable();
         });
     }
 

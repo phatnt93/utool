@@ -3,6 +3,7 @@
 namespace App\Modules\Admin\Controllers;
 
 use App\Models\User;
+use App\Models\Role;
 use App\Modules\Admin\AdminController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -12,6 +13,7 @@ class UserController extends AdminController
 {
 
     public function manage(Request $request){
+        // admin_acc_can('admin.user.manage');
         $data = [];
         $data['title'] = trans('user.manage');
         $data['datatableurl'] = route('admin.user.datatable');
@@ -37,13 +39,16 @@ class UserController extends AdminController
     }
 
     public function create(Request $request){
+        // admin_acc_can('admin.user.create');
         $data = [];
         $data['title'] = trans('user.create');
         $data['action'] = 'create';
         $data['item'] = [
             'name' => old('name'),
-            'email' => old('email')
+            'email' => old('email'),
+            'role_id' => old('role_id')
         ];
+        $data['roles'] = Role::where('id', '>', 1)->get();
         return view('Admin::user.edit', $data);
     }
 
@@ -51,7 +56,8 @@ class UserController extends AdminController
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:3|max:255|string',
             'email' => 'required|max:255|email|unique:App\Models\User,email',
-            'password' => 'required|confirmed|min:3'
+            'password' => 'required|confirmed|min:3',
+            'role_id' => 'required|numeric'
         ]);
         if ($validator->fails()) {
             return redirect(route('admin.user.create'))
@@ -74,6 +80,7 @@ class UserController extends AdminController
     }
 
     public function edit(Request $request, $id){
+        // admin_acc_can('admin.user.edit');
         $item = User::where('id', $id)
             ->where('id', '<>', auth('admin')->id())
             ->where('is_deleted', 0)
@@ -86,13 +93,15 @@ class UserController extends AdminController
         $data['title'] = trans('user.edit');
         $data['action'] = 'edit';
         $data['item'] = $item->toArray();
+        $data['roles'] = Role::where('id', '>', 1)->get();
         return view('Admin::user.edit', $data);
     }
 
     public function update(Request $request, $id){
         $rules = [
             'name' => 'required|min:3|max:255|string',
-            'status' => 'in:0,1'
+            'status' => 'in:0,1',
+            'role_id' => 'required|numeric'
         ];
         $hasPass = $request->post('password');
         if ($hasPass) {
@@ -107,7 +116,8 @@ class UserController extends AdminController
         $params = [
             'name' => $vdata['name'],
             'status' => $vdata['status'],
-            'updated_at' => date('Y-m-d H:i:s')
+            'updated_at' => date('Y-m-d H:i:s'),
+            'role_id' => $vdata['role_id']
         ];
         if ($hasPass) {
             $params['password'] = Hash::make($vdata['password']);
@@ -125,6 +135,7 @@ class UserController extends AdminController
     }
 
     public function delete(Request $request){
+        // admin_acc_can('admin.user.delete');
         try {
             $ids = array_filter(explode(',', $request->post('id')));
             $ids = (count($ids) == 0 ? [-1] : $ids);

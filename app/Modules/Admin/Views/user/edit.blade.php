@@ -38,6 +38,17 @@
                                 <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>
+                        <div class="form-group">
+                            <label for="role_id">{{ trans('role_id') }}</label>
+                            <select name="role_id" id="role_id" class="form-control select2 @error('role_id') is-invalid @enderror">
+                                @foreach ($roles as $role)
+                                    <option value="{{ $role->id }}" {{ ria('role_id', $item) == $role->id ? 'selected' : '' }}>{{ $role->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('role_id')
+                                <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div>
                         @if ($action == 'edit')
                         <div class="form-group">
                             <label for="status">{{ trans('status') }}</label>

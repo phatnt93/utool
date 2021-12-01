@@ -44,12 +44,11 @@
                     <label for="ids-all"></label>
                 </div>',
                 trans('name'),
-                trans('email'),
-                trans('role'),
+                trans('description'),
                 trans('status'),
-                '<a class="btn btn-success btn-sm" href="' . route('admin.user.create') . '">' . trans('create') . '</a>
-                    <button type="button" class="btn btn-danger btn-sm btn-bulk-delete" data-href="' . route('admin.user.delete') . '">' . trans('bulk_delete') . '</button>'
-            ], 'user') !!}
+                '<a class="btn btn-success btn-sm" href="' . route('admin.role.create') . '">' . trans('create') . '</a>
+                    <button type="button" class="btn btn-danger btn-sm btn-bulk-delete" data-href="' . route('admin.role.delete') . '">' . trans('bulk_delete') . '</button>'
+            ], 'role') !!}
         </div>
     </div>
 @endsection
@@ -58,7 +57,7 @@
     <script>
         $(document).ready(function(){
             // Datatable
-            init_datatable('dtable-user', window.location.href + '/datatable', {
+            init_datatable('dtable-role', window.location.href + '/datatable', {
                 selectorsSearch: ['name', 'order']
             });
             // END - Datatable

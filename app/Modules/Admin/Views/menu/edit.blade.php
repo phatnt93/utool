@@ -45,6 +45,13 @@
                                 <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>
+                        <div class="form-group">
+                            <label for="icon">{{ trans('icon') }}</label>
+                            <input type="text" class="form-control @error('icon') is-invalid @enderror" id="icon" name="icon" value="{{ ria('icon', $item, '') }}" placeholder="nav-icon fas fa-th">
+                            @error('icon')
+                                <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div>
                     </div>
                 </div>
                 <div class="form-group text-center">

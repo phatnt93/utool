@@ -11,7 +11,6 @@ class MenuController extends AdminController
     public function manage(Request $request){
         $data = [];
         $data['title'] = trans('menu.manage');
-        $data['datatableurl'] = route('admin.menu.datatable');
         
         return view('Admin::menu.manage', $data);
     }
@@ -48,7 +47,8 @@ class MenuController extends AdminController
             'name' => old('name'),
             'route_uri' => old('route_uri'),
             'sort' => old('sort', 0),
-            'parent' => old('parent', 0)
+            'parent' => old('parent', 0),
+            'icon' => old('icon')
         ];
         return view('Admin::menu.edit', $data);
     }
@@ -58,7 +58,8 @@ class MenuController extends AdminController
             'name' => 'required|max:255|string|unique:App\Models\Menu,name',
             'route_uri' => 'required|max:255|string|unique:App\Models\Menu,route_uri',
             'sort' => 'numeric',
-            'parent' => 'numeric'
+            'parent' => 'numeric',
+            'icon' => 'nullable|max:50|string'
         ]);
         if ($validator->fails()) {
             return redirect(route('admin.menu.create'))
@@ -87,7 +88,11 @@ class MenuController extends AdminController
         $data = [];
         $data['title'] = trans('menu.edit');
         $data['action'] = 'edit';
-        $data['parents'] = Menu::select('id', 'name')->where('parent', 0)->where('id', '<>', $id)->get();
+        if ($item->hasChilds()) {
+            $data['parents'] = [];
+        }else{
+            $data['parents'] = Menu::select('id', 'name')->where('parent', 0)->where('id', '<>', $id)->get();
+        }
         $data['item'] = $item->toArray();
         return view('Admin::menu.edit', $data);
     }
@@ -97,7 +102,8 @@ class MenuController extends AdminController
             'name' => 'required|max:255|string|unique:App\Models\Menu,name,' . $id,
             'route_uri' => 'required|max:255|string|unique:App\Models\Menu,route_uri,' . $id,
             'sort' => 'numeric',
-            'parent' => 'numeric'
+            'parent' => 'numeric',
+            'icon' => 'nullable|max:50|string'
         ]);
         if ($validator->fails()) {
             return back()->withErrors($validator)

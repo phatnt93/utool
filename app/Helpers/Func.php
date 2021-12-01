@@ -39,3 +39,25 @@ if (!function_exists('init_datatable')) {
         return $tableHtml;
     }
 }
+
+if (!function_exists('acc_can')) {
+    // Write function admin_acc_can('admin.user.manage') in function to check permission
+    // Permission::actionsAdmin()
+    function admin_acc_can($key = '', $user_id = null){
+        // Check account can access
+        if ($user_id) {
+            $user = App\Models\User::where('id', $user_id)->first();
+        }else{
+            $user = auth('admin')->user();
+        }
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
+        $isAllow = $user->checkPermission($key);
+        // If denied then redirect to error page
+        if (!$isAllow) {
+            header('location: /admin/error');
+            exit;
+        }
+    }
+}

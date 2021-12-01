@@ -11,4 +11,9 @@ class IndexController extends AdminController
         $data['title'] = trans('dashboard');
         return view('Admin::dashboard', $data);
     }
+
+    public function error(){
+        $data = [];
+        return view('Admin::error', $data);
+    }
 }
